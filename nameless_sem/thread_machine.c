@@ -3,7 +3,7 @@
  * @Github: https://github.com/northwardtop
  * @Date: 2019-02-09 00:56:02
  * @LastEditors: northward
- * @LastEditTime: 2019-02-09 15:24:37
+ * @LastEditTime: 2019-02-09 16:15:50
  * @Description: 
  *  使用无名信号量实现三线程循环同步状态机
  *  模拟 取数据->处理数据->输出数据
@@ -191,10 +191,12 @@ void *write_thread(void *arg)
 void show_buf(char *buf)
 {
     int r,h,w;
-    sem_getvalue(&read_sem, &r);
+    int ret;
+    ret=sem_getvalue(&read_sem, &r);
+    if(ret<0)
+        handle_error("sem_getvalue failed");
     sem_getvalue(&handle_sem, &h);
     sem_getvalue(&handle_sem, &w);
-    printf("read_sem: %d\thandle_sem: %d\twrite_sem: %d\n", \
-         r, h, w);
+    printf("read_sem: %d\thandle_sem: %d\twrite_sem: %d\n", r, h, w);
     printf("Buffer: %s\n", buf);
 }
